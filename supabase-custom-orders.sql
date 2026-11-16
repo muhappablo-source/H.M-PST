@@ -50,3 +50,9 @@ with check (exists(select 1 from public.store_admins a where a.user_id=auth.uid(
 grant select on public.store_categories to anon, authenticated;
 grant insert,update,delete on public.store_categories to authenticated;
 insert into public.store_categories(name) values ('بوسترات'),('مطبوعات') on conflict(name) do nothing;
+
+
+-- Product discount support for H.M PST
+alter table public.products add column if not exists discount_enabled boolean not null default false;
+alter table public.products add column if not exists original_price numeric(10,2);
+alter table public.products add column if not exists discount_value numeric(10,2) not null default 0;
