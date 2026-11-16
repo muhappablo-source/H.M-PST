@@ -12,6 +12,7 @@
 <section id="dashboard" class="hidden">
 <div class="panel"><h1>إدارة المنتجات</h1><p class="muted">إضافة المنتجات وتعديلها وحذفها. المنتجات النشطة تظهر في واجهة المتجر.</p><button class="secondary" id="logout">تسجيل الخروج</button></div>
 <div class="panel"><h2>إدارة أقسام المنتجات</h2><p class="muted">أضف الأقسام أو احذفها، وستظهر تلقائياً في مربعات الأقسام بالمتجر.</p><div class="row"><input id="newCategory" maxlength="40" placeholder="اسم القسم الجديد"><button type="button" id="addCategory">إضافة قسم</button></div><div id="categoryList" class="muted">جاري تحميل الأقسام...</div></div>
+<div class="panel"><h2>منتجات تجربة الكاميرا</h2><p class="muted">أضف هنا الصور التي تظهر في قائمة اختيار تجربة البرواز. هذه القائمة مستقلة عن منتجات المتجر.</p><form id="roomTryForm"><input id="roomTryId" type="hidden"><label>اسم المنتج</label><input id="roomTryName" maxlength="100" required placeholder="مثال: برواز Tul8te"><label>صورة المنتج</label><input id="roomTryPhoto" type="file" accept="image/*" required><p class="muted">صورة واحدة بحد أقصى 5 ميجابايت.</p><div class="row"><button type="submit">إضافة لقائمة التصوير</button><button type="button" class="secondary" id="roomTryClear">مسح</button></div><div id="roomTryMsg" class="msg hidden"></div></form><h3>المنتجات المضافة للكاميرا</h3><div id="roomTryList" class="muted">جاري التحميل...</div></div>
 <div class="panel"><h2 id="formTitle">إضافة منتج جديد</h2><form id="productForm">
 <input id="productId" type="hidden">
 <label>اسم المنتج</label><input id="name" maxlength="100" required>
