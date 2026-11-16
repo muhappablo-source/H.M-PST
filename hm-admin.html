@@ -15,6 +15,7 @@
 
 <div class="panel"><h2 id="formTitle">إضافة منتج جديد</h2><form id="productForm">
 <input id="productId" type="hidden">
+<label>نوع الإضافة</label><select id="entryType"><option value="store">منتج عادي في المتجر</option><option value="preview">معاينة في الكاميرا فقط</option></select>
 <label>اسم المنتج</label><input id="name" maxlength="100" required>
 <div id="storeOnlyFields"><div class="row"><div><label>السعر بالجنيه (بدون خصم)</label><input id="price" type="number" min="0" step="0.01" required><div class="discount-box"><label><input id="discountEnabled" type="checkbox" style="width:auto"> تفعيل خصم على المنتج</label><div id="discountFields" class="hidden"><div class="row"><div><label>السعر الأول (قبل الخصم)</label><input id="originalPrice" type="number" min="0" step="0.01"></div><div><label>نسبة الخصم (%)</label><input id="discountPercent" type="number" min="0" max="100" step="0.01" placeholder="مثلاً 20"></div></div><label>السعر الثاني (بعد الخصم)</label><input id="salePrice" type="number" min="0" step="0.01"><small id="discountPreview" class="muted">أدخل نسبة الخصم والسعرين بنفسك.</small></div></div></div><div><label>القسم</label><select id="category"><option>جاري تحميل الأقسام...</option></select></div></div>
 <label>الوصف</label><textarea id="description" rows="3"></textarea>
