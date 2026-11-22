@@ -151,3 +151,6 @@ $$;
 
 revoke all on function public.generate_hm_promo_codes() from public;
 grant execute on function public.generate_hm_promo_codes() to authenticated;
+
+-- Refresh PostgREST's function schema cache so the admin button can call the RPC.
+notify pgrst, 'reload schema';
