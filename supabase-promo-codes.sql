@@ -98,3 +98,56 @@ revoke all on function public.check_hm_promo_code(text) from public;
 grant execute on function public.check_hm_promo_code(text) to anon, authenticated;
 revoke all on function public.consume_hm_promo_code(text) from public;
 grant execute on function public.consume_hm_promo_code(text) to authenticated;
+
+-- Admin bulk generation and visitor assignment from the pre-generated pool.
+create or replace function public.generate_hm_promo_codes()
+returns integer
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare v_added integer := 0; v_code text; v_try integer;
+begin
+  if not exists (select 1 from public.store_admins a where a.user_id = auth.uid()) then
+    raise exception 'admin only';
+  end if;
+  if (select count(*) from public.promo_codes) >= 100 then
+    raise exception 'campaign already has 100 codes';
+  end if;
+  while (select count(*) from public.promo_codes) < 100 loop
+    v_code := upper(substr(encode(gen_random_bytes(4),'hex'),1,5));
+    begin
+      insert into public.promo_codes(code) values(v_code);
+      v_added := v_added + 1;
+    exception when unique_violation then null;
+    end;
+  end loop;
+  return v_added;
+end;
+$$;
+
+create or replace function public.issue_hm_promo_code(p_visitor uuid)
+returns text
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare v_code text;
+begin
+  if p_visitor is null then raise exception 'visitor id required'; end if;
+  select code into v_code from public.promo_codes
+   where assigned_visitor = p_visitor and not is_used limit 1;
+  if v_code is not null then return v_code; end if;
+  update public.promo_codes
+     set assigned_visitor = p_visitor
+   where id = (select id from public.promo_codes
+               where assigned_visitor is null and not is_used
+               order by id limit 1 for update skip locked)
+   returning code into v_code;
+  if v_code is null then raise exception 'no promo codes available'; end if;
+  return v_code;
+end;
+$$;
+
+revoke all on function public.generate_hm_promo_codes() from public;
+grant execute on function public.generate_hm_promo_codes() to authenticated;
