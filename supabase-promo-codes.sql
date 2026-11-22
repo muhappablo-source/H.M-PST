@@ -42,7 +42,7 @@ begin
   if v_count >= 100 then raise exception 'promo campaign is full'; end if;
 
   for v_try in 1..30 loop
-    v_code := upper(substr(encode(gen_random_bytes(4),'hex'),1,5));
+    v_code := upper(substr(md5(random()::text || clock_timestamp()::text || pg_backend_pid()::text),1,5));
     begin
       insert into public.promo_codes(code, assigned_visitor)
       values (v_code, p_visitor);
@@ -115,7 +115,7 @@ begin
     raise exception 'campaign already has 100 codes';
   end if;
   while (select count(*) from public.promo_codes) < 100 loop
-    v_code := upper(substr(encode(gen_random_bytes(4),'hex'),1,5));
+    v_code := upper(substr(md5(random()::text || clock_timestamp()::text || pg_backend_pid()::text),1,5));
     begin
       insert into public.promo_codes(code) values(v_code);
       v_added := v_added + 1;
